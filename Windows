@@ -1,0 +1,172 @@
+## Outline
+---
+## Basic Usage
+
+##bash
+```echo "Hello World"          # Output 'Hello World' to terminal screen
+cls                         # Clear screen
+chcp 65001                  # Change character encoding to fix garbled text
+Add-AppxPackage xxx.Msixbundle   # Install msixbundle file```
+
+
+##shutdown    # Shutdown, restart, log off, or sleep the computer
+   ``` shutdown -s -t 60       # Shutdown after 60 seconds
+    shutdown -s -t 3600     # Shutdown after 1 hour
+    tsshutdn                # Shutdown after 60 seconds
+    shutdown -s -f          # Force shutdown
+    shutdown -s -t          # Time
+    shutdown -a             # Cancel shutdown command```
+
+## Execute Scripts
+cscript     # Execute a VBS script
+    cscript /Nologo test.vbs    # Execute test.vbs script
+
+call ff.bat                     # Call and execute ff.bat script (ff.bat script must complete before the original script continues)
+
+start  # Run a program or command
+    start /max notepad.exe      # Start Notepad maximized
+    start /min calc.exe         # Start Calculator minimized
+    start /min "" d:\Proxifier.exe  # Start Proxifier proxy tool minimized
+    start tasklist              # Start a cmd instance window and run tasklist
+    start explorer f:\          # Invoke Explorer to open drive F
+    start iexplore "www.qq.com" # Start IE and open www.qq.com
+    start ff.bat                # Begin executing ff.bat (after starting ff.bat, the original script continues without waiting for ff.bat to complete)
+
+
+## Environment Variables
+set         # Display all environment variables for the current user
+
+    set path            # View the value of the 'path' environment variable (specifically, view variables that start with 'path')
+    set path=           # Clear the 'path' variable
+
+    set path=d:\execute
+    # Set the 'path' variable to d:\execute (Note: This change only affects the current session and won't be saved in system settings; when the cmd window closes, the new 'path' setting will no longer exist)
+
+    set path=%path%;d:\execute
+    # Add d:\execute to the 'path' variable (Note: This modification only affects the current session and won't be saved in system settings; when the cmd window closes, the new 'path' setting will no longer exist)
+
+path        # Display the current value of the 'path' variable
+
+    path ;              # Clear all search path settings and instruct cmd.exe to only search in the current directory
+    path d:\xxx;%PATH%  # Add d:\xxx to the path
+
+## Symbols
+### &
+  Execute multiple commands in sequence, regardless of whether the commands succeed
+  
+  cd /d d:\src&work.exe /o c:\result.txt
+  # First, change the current working directory to d:\src, then execute work.exe /o c:\result.txt
+
+### &&
+  Execute multiple commands in sequence, stop executing further commands if an error occurs
+
+  find "ok" c:\test.txt && echo Successful
+  # If "ok" is found, display "Successful"; if not found, do not display
+
+### ||
+  Execute multiple commands in sequence, stop executing further commands if a command succeeds
+  
+  find "ok" c:\test.txt || echo Unsuccessful
+  # If "ok" is not found, display "Unsuccessful"; if found, do not display
+
+### | 
+  dir *.* /s/a | find /c ".exe"
+  # First, execute the dir command, then perform the find command on the output (stdout) to count the number of .exe files in the current directory and all subdirectories)
+  
+  dir *.* /s/a 2>&1 | find /c ".exe"
+  # First, execute the dir command, then perform the find command on both the output (stdout) and error messages (stderr) to count the number of .exe files in the current directory and all subdirectories)
+
+### >
+  Redirect the output of the current command in an overwriting manner
+  
+  tasklist > p1.txt
+  # Redirect the output (stdout) of tasklist into p1.txt in an overwriting manner (Note: the output of tasklist will not be printed to the screen)
+  
+  tasklist 1> p1.txt
+  # Equivalent to: tasklist > p1.txt
+  
+  dir bin 2> p1.txt
+  # Print the output (stdout) to the screen, and redirect error messages (stderr) in an overwriting manner to p1.txt (Note: if the bin directory does not exist, error messages will be output)
+  
+  dir bin > p1.txt 2>&1
+  # Redirect error messages (stderr) to the output (stdout), then redirect the output (stdout) in an overwriting manner to p1.txt (Note: if the bin directory does not exist, error messages will be output)
+  
+  dir bin 2> p1.txt 1>&2
+  # Redirect the output (stdout) to error messages (stderr), then redirect error messages (stderr) in an overwriting manner to p1.txt (Note: if the bin directory does not exist, error messages will be output)
+  
+  tasklist >nul
+  # Do not print the output (stdout) of tasklist to the screen; error messages (stderr) will still be printed
+  
+  dir bin 2>nul
+  # Do not print command error messages (stderr) to the screen; output results (stdout) will still be printed (Note: if the bin directory does not exist, error messages will be output)
+  
+  dir bin >nul 2>&1
+  # Redirect command error messages (stderr) to the output (stdout), then do not print the output (stdout) [both error messages (stderr) and output results (stdout) are not printed] (Note: if the bin directory does not exist, error messages will be output)
+  
+  dir bin 2>nul 1>&2
+  # Redirect command output (stdout) to error messages (stderr), then do not print error messages (stderr) [both error messages (stderr) and output results (stdout) are not printed] (Note: if the bin directory does not exist, error messages will be output)
+
+### >>
+  Redirect the output of the current command in an appending manner
+  
+  tasklist >> p2.txt
+  # Redirect the output (stdout) of tasklist into p2.txt in an appending manner (Note: the output of tasklist will not be printed to the screen)
+  
+  tasklist 1>> p2.txt
+  # Equivalent to: tasklist >> p2.txt
+  
+  dir bin 2>> p2.txt
+  # Print the output (stdout) to the screen, and redirect error messages (stderr) in an appending manner to p2.txt (Note: if the bin directory does not exist, error messages will be output)
+  
+  dir bin >> p2.txt 2>&1
+  # Redirect error messages (stderr) to the output (stdout), then redirect the output (stdout) in an appending manner to p2.txt (Note: if the bin directory does not exist, error messages will be output)
+  
+  dir bin 2>> p2.txt 1>&2
+  # Redirect the output (stdout) to error messages (stderr), then redirect error messages (stderr) in an appending manner to p2.txt (Note: if the bin directory does not exist, error messages will be output)
+
+###  < 
+  Get input from a file instead of from the screen, typically used for commands like date, time, label, etc. that require user input  
+  date <temp.txt
+  # The content of temp.txt is 2005-05-01
+### ,
+  In certain special cases, a comma can be used to replace a space
+  dir,c:\
+  # Equivalent to: dir c:\
+
+### ; 
+  When commands are the same, different targets can be separated by semicolons but the execution effect remains unchanged. If an error occurs during execution, only an error report is returned but the program continues to execute
+    dir c:\;d:\;e:\
+  # Equivalent to sequentially executing: dir c:\    dir d:\     dir e:\
+  
+
+## Session Info
+query user                                  # View session
+
+# Check Character encoding
+  chcp    # View the character encoding of the command line environment (a global setting)
+      936 -- GBK (default encoding under general conditions)
+      437 -- US English
+      65001 -- utf-8
+      1200 -- utf-16
+      1201 -- utf-16 (Big-Endian)
+      12000 -- utf-32
+      12001 -- utf-32 (Big-Endian)
+
+## RDP
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f
+REG add HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server /v fDenyTSConnections /d 0 /t REG_DWORD /f
+
+wmic /namespace:\\root\CIMV2\TerminalServices PATH Win32_TerminalServiceSetting WHERE (__CLASS !="") CALL SetAllowTSConnections 1
+.set rdp port to 2008
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\Wds\rdpwd\Tds\tcp /v PortNumber /t REG_DWORD /d 0x7d8 /f
+REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp /v PortNumber /t REG_DWORD /d 0x7D8 /f
+
+##
+##
+##
+##
+##
+##
+##
+##
+##
